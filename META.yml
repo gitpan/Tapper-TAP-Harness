@@ -1,0 +1,38 @@
+---
+abstract: 'Tapper - Tapper specific TAP handling'
+author:
+  - '-2011 AMD OSRC Tapper Team, all rights reserved.'
+  - 'AMD OSRC Tapper Team <tapper@amd64.org>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+  File::Slurp: 0
+  TAP::DOM: 0
+  Test::More: 0
+  Test::Perl::Critic: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 1.00'
+license: freebsd
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Tapper-TAP-Harness
+no_index:
+  directory:
+    - inc
+    - t
+    - xt
+requires:
+  Archive::Tar: 0
+  Directory::Scratch: 0
+  IO::Scalar: 0
+  IO::String: 0
+  Moose: 0
+  TAP::Formatter::HTML: 0.04
+  TAP::Parser: 0
+  TAP::Parser::Aggregator: 0
+  Test::Harness: 3.22
+  YAML::Tiny: 0
+  perl: 5.10.0
+version: 3.000001
