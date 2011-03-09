@@ -7,6 +7,7 @@ build_requires:
   ExtUtils::MakeMaker: 6.42
   File::Slurp: 0
   TAP::DOM: 0
+  Tapper::Test: 0
   Test::More: 0
   Test::Perl::Critic: 0
 configure_requires:
@@ -35,4 +36,4 @@ requires:
   Test::Harness: 3.22
   YAML::Tiny: 0
   perl: 5.10.0
-version: 3.000001
+version: 3.000002
