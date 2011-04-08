@@ -19,7 +19,7 @@
 #     MIN_PERL_VERSION => q[5.010]
 #     NAME => q[Tapper::TAP::Harness]
 #     NO_META => q[1]
-#     PREREQ_PM => { Directory::Scratch=>q[0], IO::Scalar=>q[0], Tapper::Test=>q[3.000010], Test::Perl::Critic=>q[0], Archive::Tar=>q[1.76], File::Slurp=>q[0], Moose=>q[0], Test::Harness=>q[3.22], IO::Zlib=>q[0], IO::String=>q[0], YAML::Tiny=>q[0], TAP::DOM=>q[0], ExtUtils::MakeMaker=>q[6.42], TAP::Parser=>q[3.23], TAP::Formatter::HTML=>q[0.04], TAP::Parser::Aggregator=>q[0], Test::More=>q[0] }
+#     PREREQ_PM => { Directory::Scratch=>q[0], IO::Scalar=>q[0], Tapper::Test=>q[3.000010], Test::Perl::Critic=>q[0], Archive::Tar=>q[0], File::Slurp=>q[0], Moose=>q[0], Test::Harness=>q[3.22], IO::Zlib=>q[0], IO::String=>q[0], YAML::Tiny=>q[0], TAP::DOM=>q[0], ExtUtils::MakeMaker=>q[6.42], TAP::Parser=>q[3.23], TAP::Formatter::HTML=>q[0.04], TAP::Parser::Aggregator=>q[0], Test::More=>q[0] }
 #     VERSION => q[3.000010]
 #     VERSION_FROM => q[lib/Tapper/TAP/Harness.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
@@ -774,7 +774,7 @@ ppd :
 	$(NOECHO) $(ECHO) '    <AUTHOR>-2011 AMD OSRC Tapper Team, all rights reserved., AMD OSRC Tapper Team &lt;tapper@amd64.org&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <PERLCORE VERSION="5,010,0,0" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Archive::Tar" VERSION="1.76" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Archive::Tar" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Directory::Scratch" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="IO::Scalar" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="IO::String" />' >> $(DISTNAME).ppd
