@@ -1,4 +1,11 @@
 package Tapper::TAP::Harness;
+BEGIN {
+  $Tapper::TAP::Harness::AUTHORITY = 'cpan:AMD';
+}
+{
+  $Tapper::TAP::Harness::VERSION = '4.0.1';
+}
+# ABSTRACT: Tapper - Tapper specific TAP handling
 
 use 5.010;
 use strict;
@@ -13,7 +20,7 @@ use Archive::Tar;
 use IO::Scalar;
 use IO::String;
 
-our $VERSION = '3.000010';
+
 
 our @SUITE_HEADER_KEYS_GENERAL = qw(suite-version
                                     hardwaredb-systems-id
@@ -31,6 +38,7 @@ our @SUITE_HEADER_KEYS_DATE = qw(starttime-test-program
 our @SUITE_HEADER_KEYS_REPORTGROUP = qw(reportgroup-arbitrary
                                         reportgroup-testrun
                                         reportgroup-primary
+                                        owner
                                       );
 
 our @SUITE_HEADER_KEYS_REPORTCOMMENT = qw(reportcomment );
@@ -48,7 +56,7 @@ our @SECTION_HEADER_KEYS_GENERAL = qw(ram cpuinfo bios lspci lsusb uname osname 
                                       simnow-device-interface-version
                                       simnow-bsd-file
                                       simnow-image-file
-                                      ticket-url wiki-url planning-id
+                                      ticket-url wiki-url planning-id moreinfo-url
                                       tags
                                     );
 
@@ -59,7 +67,7 @@ has tap_is_archive => ( is => 'rw' );
 has parsed_report  => ( is => 'rw', isa => 'HashRef', default => sub {{}} );
 has section_names  => ( is => 'rw', isa => 'HashRef', default => sub {{}} );
 
-our $re_prove_section          = qr/^([-_\d\w\/.]*\w)\s?\.{2,}$/;
+our $re_prove_section          = qr/^([-_\d\w\/.]*\w)\s?\.{2,}\s*$/;
 our $re_tapper_meta           = qr/^#\s*((?:Tapper|Artemis)-)([-\w]+):(.+)$/i;
 our $re_tapper_meta_section   = qr/^#\s*((?:Tapper|Artemis)-Section:)\s*(.+)$/i;
 our $re_explicit_section_start = qr/^#\s*((?:Tapper|Artemis)-explicit-section-start:)\s*(\S*)/i;
@@ -131,6 +139,9 @@ sub _parse_tap_into_sections
         return $self->_parse_tap_into_sections_archive(@_) if $self->tap_is_archive;
         return $self->_parse_tap_into_sections_raw(@_);
 }
+
+
+sub fix_last_ok { ${+shift} =~ s/\nok$// }
 
 # return sections
 sub _parse_tap_into_sections_raw
@@ -210,6 +221,7 @@ sub _parse_tap_into_sections_raw
                         #say STDERR "****************************************";
                         if (keys %section) {
                                 # Store a copy (ie., not \%section) so it doesn't get overwritten in next loop
+                                fix_last_ok(\ $section{raw}) if $looks_like_prove_output;
                                 push @{$self->parsed_report->{tap_sections}}, { %section };
                         }
                         %section = ();
@@ -218,8 +230,8 @@ sub _parse_tap_into_sections_raw
 
                 # ----- extract some meta information -----
 
-                # a normal TAP line and not a summary line from "prove"
-                if ( not $is_unknown and not ($looks_like_prove_output and $raw =~ /^ok$/) ) {
+                # a normal TAP line
+                if ( not $is_unknown ) {
                         $section{raw} .= "$raw\n";
                 }
 
@@ -250,6 +262,7 @@ sub _parse_tap_into_sections_raw
         }
 
         # store last section
+        fix_last_ok(\ $section{raw}) if $looks_like_prove_output;
         push @{$self->parsed_report->{tap_sections}}, { %section } if keys %section;
 
         $self->fix_section_names;
@@ -266,9 +279,13 @@ sub _get_tap_sections_from_archive
 
         my $meta         = YAML::Tiny::Load($tar->get_content("meta.yml"));
         my @tap_sections = map {
-                                my $f = $_;
-                                $f =~ s,^\./,,;
-                                { tap => $tar->get_content($f), filename => $f };
+                                my $f1 = $_;                          # original name as-is
+                                my $f2 = $_; $f2 =~ s,^\./,,;         # force no-leading-dot
+                                my $f3 = $_; $f3 = "./$_";            # force    leading-dot
+                                local $Archive::Tar::WARN = 0;
+                                my $tap = $tar->get_content($f1) // $tar->get_content($f2) // $tar->get_content($f3);
+                                $tap = "# Untar Bummer!" if ! defined $tar;
+                                { tap => $tap, filename => $f1 };
                                } @{$meta->{file_order}};
         return @tap_sections;
 }
@@ -297,7 +314,7 @@ sub _parse_tap_into_sections_archive
 
                 my $tap       = $tap_file->{tap};
                 my $filename  = $tap_file->{filename};
-                
+
                 my $parser = TAP::Parser->new ({ tap => $tap, version => 13 });
 
                 # ----- store previous section, start new section -----
@@ -354,6 +371,7 @@ sub _parse_tap_into_sections_archive
         #print STDERR Dumper($self->parsed_report);
         $self->fix_section_names;
 }
+
 
 sub fix_section_names
 {
@@ -480,6 +498,7 @@ sub _process_meta_information
 
 }
 
+
 sub evaluate_report
 {
         my ($self) = @_;
@@ -502,6 +521,7 @@ sub _fix_generated_html
 
         return $html;
 }
+
 
 sub generate_html
 {
@@ -550,25 +570,47 @@ sub generate_html
         return $html;
 }
 
-1;
+1; # End of Tapper::TAP::Harness
+
+__END__
+=pod
+
+=encoding utf-8
 
 =head1 NAME
 
 Tapper::TAP::Harness - Tapper - Tapper specific TAP handling
 
-=head1 SYNOPSIS
+=head2 fix_last_ok
 
-    use Tapper::TAP::Harness;
-    my $foo = Tapper::TAP::Harness->new();
-    ...
+The C<prove> tool adds an annoying last summary line, cut that away.
 
-=head1 COPYRIGHT & LICENSE
+=head2 fix_section_names
 
-Copyright 2008-2011 AMD OSRC Tapper Team, all rights reserved.
+Create sensible section names that fit further processing,
+eg. substitute whitespace by dashes, fill missing names, etc.
 
-This program is released under the following license: freebsd
+=head2 evaluate_report
 
+Actually evaluate the content of the incoming report by parsing it,
+aggregate the sections and extract contained meta information.
+
+=head2 generate_html
+
+Render TAP through TAP::Formatter::HTML and fix some formatting to fit
+into Tapper.
+
+=head1 AUTHOR
+
+AMD OSRC Tapper Team <tapper@amd64.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2012 by Advanced Micro Devices, Inc..
+
+This is free software, licensed under:
+
+  The (two-clause) FreeBSD License
 
 =cut
 
-1; # End of Tapper::TAP::Harness

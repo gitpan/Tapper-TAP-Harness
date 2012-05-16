@@ -1,35 +1,67 @@
+
 use strict;
 use warnings;
 
-use inc::Module::Install;
+use 5.010;
 
-name     'Tapper-TAP-Harness';
-all_from 'lib/Tapper/TAP/Harness.pm';
-author   'AMD OSRC Tapper Team <tapper@amd64.org>';
-license  'freebsd';
+use ExtUtils::MakeMaker 6.30;
 
-build_requires 'Test::More'         => 0;
-build_requires 'Test::Perl::Critic' => 0;
-build_requires 'File::Slurp'        => 0;
-build_requires 'TAP::DOM'           => 0;
-build_requires 'Tapper::Test' => "3.000010";
 
-author_requires 'Module::Install::WriteAll';
 
-requires 'Moose'                   => 0;
-requires 'Test::Harness'           => '3.22';
-requires 'TAP::Parser'             => "3.23";
-requires 'TAP::Parser::Aggregator' => 0;
-requires 'Directory::Scratch'      => 0;
-requires 'TAP::Formatter::HTML'    => '0.04';
-requires 'YAML::Tiny'              => 0;
-requires 'Archive::Tar'            => "1.76";
-requires 'IO::Scalar'              => 0;
-requires 'IO::String'              => 0;
-requires 'IO::Zlib'                => 0;
+my %WriteMakefileArgs = (
+  "ABSTRACT" => "Tapper - Tapper specific TAP handling",
+  "AUTHOR" => "AMD OSRC Tapper Team <tapper\@amd64.org>",
+  "BUILD_REQUIRES" => {
+    "File::Slurp" => 0,
+    "TAP::DOM" => 0,
+    "Test::Deep" => 0,
+    "Test::More" => 0
+  },
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
+  },
+  "DISTNAME" => "Tapper-TAP-Harness",
+  "EXE_FILES" => [],
+  "LICENSE" => "open_source",
+  "NAME" => "Tapper::TAP::Harness",
+  "PREREQ_PM" => {
+    "Archive::Tar" => 0,
+    "Data::Dumper" => 0,
+    "Directory::Scratch" => 0,
+    "File::Temp" => 0,
+    "IO::Scalar" => 0,
+    "IO::String" => 0,
+    "Moose" => 0,
+    "TAP::Parser" => 0,
+    "TAP::Parser::Aggregator" => 0,
+    "YAML::Tiny" => 0,
+    "strict" => 0,
+    "warnings" => 0
+  },
+  "VERSION" => "4.0.1",
+  "test" => {
+    "TESTS" => "t/*.t t/backcompat/*.t"
+  }
+);
 
-repository 'git://github.com/amd/Tapper-TAP-Harness.git';
-bugtracker 'http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Tapper-TAP-Harness';
 
-WriteAll;
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM};
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
+}
+
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+WriteMakefile(%WriteMakefileArgs);
+
+
 
