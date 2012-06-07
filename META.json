@@ -28,7 +28,7 @@
             "IO::Scalar" : "0",
             "IO::String" : "0",
             "Moose" : "0",
-            "TAP::Parser" : "0",
+            "TAP::Parser" : "3.22",
             "TAP::Parser::Aggregator" : "0",
             "YAML::Tiny" : "0",
             "perl" : "5.010",
@@ -58,7 +58,7 @@
          "web" : "http://github.com/amd/Tapper-TAP-Harness"
       }
    },
-   "version" : "4.0.1",
+   "version" : "4.0.2",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -220,6 +220,17 @@
             "class" : "Dist::Zilla::Plugin::Git::Push",
             "name" : "@AMD/@Git/Push",
             "version" : "1.121010"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Prereqs",
+            "config" : {
+               "Dist::Zilla::Plugin::Prereqs" : {
+                  "phase" : "runtime",
+                  "type" : "requires"
+               }
+            },
+            "name" : "Prereqs",
+            "version" : "4.300016"
          },
          {
             "class" : "Dist::Zilla::Plugin::FinderCode",

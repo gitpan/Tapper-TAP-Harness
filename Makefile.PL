@@ -32,13 +32,13 @@ my %WriteMakefileArgs = (
     "IO::Scalar" => 0,
     "IO::String" => 0,
     "Moose" => 0,
-    "TAP::Parser" => 0,
+    "TAP::Parser" => "3.22",
     "TAP::Parser::Aggregator" => 0,
     "YAML::Tiny" => 0,
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "4.0.1",
+  "VERSION" => "4.0.2",
   "test" => {
     "TESTS" => "t/*.t t/backcompat/*.t"
   }

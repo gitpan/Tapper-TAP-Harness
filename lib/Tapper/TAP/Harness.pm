@@ -3,7 +3,7 @@ BEGIN {
   $Tapper::TAP::Harness::AUTHORITY = 'cpan:AMD';
 }
 {
-  $Tapper::TAP::Harness::VERSION = '4.0.1';
+  $Tapper::TAP::Harness::VERSION = '4.0.2';
 }
 # ABSTRACT: Tapper - Tapper specific TAP handling
 
