@@ -60,6 +60,7 @@ t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/strange_tap.t
 t/strange_tap_STM.t
+t/strange_tap_benchmark-s3.t
 t/strange_tap_kvm_building.t
 t/strange_tap_lazy_plan.t
 t/strange_tap_oprofile_explicit_sections.t
@@ -71,6 +72,7 @@ t/tap-archive-1.tgz
 t/tap-archive-2.tgz
 t/tap_archive_STM_explicit_section.tap
 t/tap_archive_STM_explicit_section_no_yaml.tap
+t/tap_archive_benchmark-s3.tap
 t/tap_archive_daily_report.tap
 t/tap_archive_headers_kvm.tap
 t/tap_archive_headers_simnow.tap

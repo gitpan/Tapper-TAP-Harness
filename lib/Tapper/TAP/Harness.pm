@@ -1,9 +1,11 @@
 package Tapper::TAP::Harness;
+# git description: v4.0.2-3-gbea4cc5
+
 BEGIN {
   $Tapper::TAP::Harness::AUTHORITY = 'cpan:AMD';
 }
 {
-  $Tapper::TAP::Harness::VERSION = '4.0.2';
+  $Tapper::TAP::Harness::VERSION = '4.1.0';
 }
 # ABSTRACT: Tapper - Tapper specific TAP handling
 
@@ -154,7 +156,7 @@ sub _parse_tap_into_sections_raw
         my $report_tap = $self->tap;
 
         my $TAPVERSION = "TAP Version 13";
-        $report_tap    = $TAPVERSION."\n".$report_tap unless $report_tap =~ /^TAP Version/ms;
+        $report_tap    = $TAPVERSION."\n".$report_tap unless $report_tap =~ /^TAP Version/msi;
 
         $report_tap = _fix_broken_tap($report_tap);
         my $parser = new TAP::Parser ({ tap => $report_tap, version => 13 });
@@ -402,7 +404,7 @@ sub _aggregate_sections
         foreach my $section (@{$self->parsed_report->{tap_sections}})
         {
                 my $rawtap = $section->{raw} || '';
-                $rawtap    = $TAPVERSION."\n".$rawtap unless $rawtap =~ /^TAP Version/ms;
+                $rawtap    = $TAPVERSION."\n".$rawtap unless $rawtap =~ /^TAP Version/msi;
                 my $parser = new TAP::Parser ({ tap => $rawtap });
                 $parser->run;
                 # print STDERR "# " . $section->{section_name} . "\n";
@@ -536,7 +538,7 @@ sub generate_html
         my @files = map {
                          my $fname          = "section/".$_->{section_name};
                          my $rawtap         = $_->{raw};
-                         $rawtap            = $TAPVERSION."\n".$rawtap unless $rawtap =~ /^TAP Version/ms;
+                         $rawtap            = $TAPVERSION."\n".$rawtap unless $rawtap =~ /^TAP Version/msi;
                          my $script_content = $rawtap;
                          my $file           = $temp->touch($fname, $script_content);
 

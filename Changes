@@ -1,5 +1,8 @@
 Revision history for Tapper-TAP-Harness
 
+4.1.0     2012-10-19
+        - recognize TAP version case-insensitive
+
 4.0.2     2012-06-07
         - require TAP::Parser >= 3.22
 
