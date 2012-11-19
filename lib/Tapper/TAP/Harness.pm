@@ -1,11 +1,11 @@
 package Tapper::TAP::Harness;
-# git description: v4.0.2-3-gbea4cc5
+# git description: v4.1.0-1-g7bc34da
 
 BEGIN {
-  $Tapper::TAP::Harness::AUTHORITY = 'cpan:AMD';
+  $Tapper::TAP::Harness::AUTHORITY = 'cpan:TAPPER';
 }
 {
-  $Tapper::TAP::Harness::VERSION = '4.1.0';
+  $Tapper::TAP::Harness::VERSION = '4.1.1';
 }
 # ABSTRACT: Tapper - Tapper specific TAP handling
 
